@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using MnemosyneAPI.Context;
 using MnemosyneAPI.Model;
 
@@ -12,7 +13,7 @@ namespace MnemosyneAPI.Endpoints
             // Listar Todos
             app.MapGet("/memories", async (MemoryDbContext db) =>
             {
-                await db.Memories.ToListAsync();
+                return await db.Memories.ToListAsync();
             });
 
             app.MapGet("/memories/{id}", async (int id, MemoryDbContext db) =>
@@ -25,9 +26,14 @@ namespace MnemosyneAPI.Endpoints
                 .Produces<Memory>(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status404NotFound);
 
-            app.MapPost("/memories", async (Memory memory, MemoryDbContext db) =>
+
+            app.MapPost("/memories", async (Memory memory, IValidator<Memory> validator,  MemoryDbContext db) =>
             {
                 if (memory == null) return Results.BadRequest("Requisição Inválida");
+
+                var validation = await validator.ValidateAsync(memory);
+
+                if(!validation.IsValid) return Results.ValidationProblem(validation.ToDictionary());
 
                 db.Memories.Add(memory);
                 await db.SaveChangesAsync();
@@ -38,11 +44,16 @@ namespace MnemosyneAPI.Endpoints
                 .Produces(StatusCodes.Status400BadRequest);
 
 
-            app.MapPut("/memories/{id}", async (int id, Memory memory, MemoryDbContext db) =>
+
+            app.MapPut("/memories/{id}", async (int id, Memory memory, IValidator<Memory> validator, MemoryDbContext db) =>
             {
                 var foundMemory = await db.Memories.FindAsync(id);
 
                 if (foundMemory is null) return Results.NotFound();
+
+                var validation = await validator.ValidateAsync(memory);
+
+                if (!validation.IsValid) return Results.ValidationProblem(validation.ToDictionary());
 
                 foundMemory.Title = memory.Title;
                 foundMemory.Date = memory.Date;
