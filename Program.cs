@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MnemosyneAPI.Context;
+using MnemosyneAPI.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,5 +28,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mnemosyne API v1");
     });
 }
+
+app.MapMemoryEndpoints();
 
 app.Run();
