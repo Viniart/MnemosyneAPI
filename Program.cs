@@ -7,6 +7,11 @@ using MnemosyneAPI.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
+builder.Services.AddHealthChecks();
+
 builder.Services.AddValidatorsFromAssemblyContaining<MemoryValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -23,6 +28,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<MemoryDbContext>(options => options.UseSqlite("Data Source=memories.db"));
 
 var app = builder.Build();
+
+app.UseHealthChecks("/health");
 
 if (app.Environment.IsDevelopment())
 {

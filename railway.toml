@@ -1,0 +1,8 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "./MnemosyneAPI/Dockerfile"
+
+[deploy]
+startCommand = "dotnet MnemosyneAPI.dll"
+restartPolicyType = "always"
+healthcheckPath = "/health"

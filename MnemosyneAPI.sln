@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MnemosyneAPI", "MnemosyneAPI.csproj", "{FA78D4EB-9DD3-44C4-BE7E-D3503A4254EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MnemosyneAPI", "MnemosyneAPI.csproj", "{FA78D4EB-9DD3-44C4-BE7E-D3503A4254EA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{1EC78B42-618E-4DD7-96ED-6328E92466E3}"
+	ProjectSection(SolutionItems) = preProject
+		railway.toml = railway.toml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
