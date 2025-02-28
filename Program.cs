@@ -12,6 +12,19 @@ builder.WebHost.UseUrls($"http://*:{port}");
 
 builder.Services.AddHealthChecks();
 
+var MinhasOrigens = "_minhasOrigens";
+
+builder.Services.AddCors(
+    options => {
+        options.AddPolicy(
+            name: MinhasOrigens,
+            policy => {
+                policy.WithOrigins("http://localhost:5173")
+            }
+        );
+    }
+);
+
 builder.Services.AddValidatorsFromAssemblyContaining<MemoryValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -21,7 +34,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Mnemosyne API",
         Version = "v1",
-        Description = "API desenvolvida no curso de Programação com C#, para atender ao Frontend do site Mnemosyne"
+        Description = "API desenvolvida no curso de Programaï¿½ï¿½o com C#, para atender ao Frontend do site Mnemosyne"
     });
 });
 
@@ -41,5 +54,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapMemoryEndpoints();
+
+app.UseCors(MinhasOrigens);
 
 app.Run();
